@@ -64,8 +64,8 @@ func TestEventCreation(t *testing.T) {
 		Convey("With valid fields", func() {
 			valid, _ := json.Marshal(testEvent)
 			Convey("When processing the event", func() {
-				var e Event
-				err := e.Process(subject, valid)
+				e := New(subject, valid)
+				err := e.Process()
 
 				Convey("It should not error", func() {
 					So(err, ShouldBeNil)
@@ -89,9 +89,9 @@ func TestEventCreation(t *testing.T) {
 			})
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, valid)
-				err := e.Validate(subject)
+				e := New(subject, valid)
+				e.Process()
+				err := e.Validate()
 
 				Convey("It should not error", func() {
 					So(err, ShouldBeNil)
@@ -102,8 +102,8 @@ func TestEventCreation(t *testing.T) {
 			})
 
 			Convey("When completing the event", func() {
-				var e Event
-				e.Process(subject, valid)
+				e := New(subject, valid)
+				e.Process()
 				e.Complete()
 				Convey("It should produce a nat.create.aws.done event", func() {
 					msg, timeout := waitMsg(completed)
@@ -118,8 +118,8 @@ func TestEventCreation(t *testing.T) {
 
 			Convey("When erroring the event", func() {
 				log.SetOutput(ioutil.Discard)
-				var e Event
-				e.Process(subject, valid)
+				e := New(subject, valid)
+				e.Process()
 				e.Error(errors.New("error"))
 				Convey("It should produce a nat.create.aws.error event", func() {
 					msg, timeout := waitMsg(errored)
@@ -140,9 +140,9 @@ func TestEventCreation(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Datacenter VPC ID invalid")
@@ -156,9 +156,9 @@ func TestEventCreation(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Datacenter Region invalid")
@@ -172,9 +172,9 @@ func TestEventCreation(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Datacenter credentials invalid")
@@ -188,9 +188,9 @@ func TestEventCreation(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Datacenter credentials invalid")
@@ -204,9 +204,9 @@ func TestEventCreation(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Network id invalid")
@@ -220,9 +220,9 @@ func TestEventCreation(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Routed networks are empty")
@@ -241,8 +241,8 @@ func TestEventDeletion(t *testing.T) {
 		Convey("With valid fields", func() {
 			valid, _ := json.Marshal(testEvent)
 			Convey("When processing the event", func() {
-				var e Event
-				err := e.Process(subject, valid)
+				e := New(subject, valid)
+				err := e.Process()
 
 				Convey("It should not error", func() {
 					So(err, ShouldBeNil)
@@ -264,9 +264,9 @@ func TestEventDeletion(t *testing.T) {
 			})
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, valid)
-				err := e.Validate(subject)
+				e := New(subject, valid)
+				e.Process()
+				err := e.Validate()
 
 				Convey("It should not error", func() {
 					So(err, ShouldBeNil)
@@ -277,8 +277,8 @@ func TestEventDeletion(t *testing.T) {
 			})
 
 			Convey("When completing the event", func() {
-				var e Event
-				e.Process(subject, valid)
+				e := New(subject, valid)
+				e.Process()
 				e.Complete()
 				Convey("It should produce a nat.delete.aws.done event", func() {
 					msg, timeout := waitMsg(completed)
@@ -293,8 +293,8 @@ func TestEventDeletion(t *testing.T) {
 
 			Convey("When erroring the event", func() {
 				log.SetOutput(ioutil.Discard)
-				var e Event
-				e.Process(subject, valid)
+				e := New(subject, valid)
+				e.Process()
 				e.Error(errors.New("error"))
 				Convey("It should produce a nat.delete.aws.error event", func() {
 					msg, timeout := waitMsg(errored)
@@ -315,9 +315,9 @@ func TestEventDeletion(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Datacenter VPC ID invalid")
@@ -331,9 +331,9 @@ func TestEventDeletion(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Datacenter Region invalid")
@@ -347,9 +347,9 @@ func TestEventDeletion(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Datacenter credentials invalid")
@@ -363,9 +363,9 @@ func TestEventDeletion(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Datacenter credentials invalid")
@@ -379,9 +379,9 @@ func TestEventDeletion(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Nat Gateway aws id invalid")
@@ -400,8 +400,8 @@ func TestEventModification(t *testing.T) {
 		Convey("With valid fields", func() {
 			valid, _ := json.Marshal(testEvent)
 			Convey("When processing the event", func() {
-				var e Event
-				err := e.Process(subject, valid)
+				e := New(subject, valid)
+				err := e.Process()
 
 				Convey("It should not error", func() {
 					So(err, ShouldBeNil)
@@ -425,9 +425,9 @@ func TestEventModification(t *testing.T) {
 			})
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, valid)
-				err := e.Validate(subject)
+				e := New(subject, valid)
+				e.Process()
+				err := e.Validate()
 
 				Convey("It should not error", func() {
 					So(err, ShouldBeNil)
@@ -438,8 +438,8 @@ func TestEventModification(t *testing.T) {
 			})
 
 			Convey("When completing the event", func() {
-				var e Event
-				e.Process(subject, valid)
+				e := New(subject, valid)
+				e.Process()
 				e.Complete()
 				Convey("It should produce a nat.update.aws.done event", func() {
 					msg, timeout := waitMsg(completed)
@@ -454,8 +454,8 @@ func TestEventModification(t *testing.T) {
 
 			Convey("When erroring the event", func() {
 				log.SetOutput(ioutil.Discard)
-				var e Event
-				e.Process(subject, valid)
+				e := New(subject, valid)
+				e.Process()
 				e.Error(errors.New("error"))
 				Convey("It should produce a nat.update.aws.error event", func() {
 					msg, timeout := waitMsg(errored)
@@ -476,9 +476,9 @@ func TestEventModification(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Datacenter VPC ID invalid")
@@ -492,9 +492,9 @@ func TestEventModification(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Datacenter Region invalid")
@@ -508,9 +508,9 @@ func TestEventModification(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Datacenter credentials invalid")
@@ -524,9 +524,9 @@ func TestEventModification(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Datacenter credentials invalid")
@@ -540,9 +540,9 @@ func TestEventModification(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Network id invalid")
@@ -556,9 +556,9 @@ func TestEventModification(t *testing.T) {
 			invalid, _ := json.Marshal(testEventInvalid)
 
 			Convey("When validating the event", func() {
-				var e Event
-				e.Process(subject, invalid)
-				err := e.Validate(subject)
+				e := New(subject, invalid)
+				e.Process()
+				err := e.Validate()
 				Convey("It should error", func() {
 					So(err, ShouldNotBeNil)
 					So(err.Error(), ShouldEqual, "Routed networks are empty")

@@ -8,10 +8,7 @@ Service to manage aws nats, it responds to:
 - [x] nat.delete.aws 
 - [ ] nat.get.aws 
 
-And responds respectively with <original_subject>.error or <original_subject>.done respectively
-
-## Build status
-
+And responds respectively with original_subject.error or original_subjet.done respectively
 
 ## Installation
 
